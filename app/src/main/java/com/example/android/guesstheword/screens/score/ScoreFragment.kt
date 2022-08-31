@@ -22,7 +22,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.ScoreFragmentBinding
@@ -54,8 +56,20 @@ class ScoreFragment : Fragment() {
         //initialize the viewModelFactory
         viewModelFactory = ScoreViewModelFactory(ScoreFragmentArgs.fromBundle(requireArguments()).score)
         viewModel= ViewModelProvider(this,viewModelFactory).get(ScoreViewModel::class.java)
-        binding.scoreText.text=viewModel.score.toString()
+        viewModel.score.observe(viewLifecycleOwner, Observer{ newScore->
+            binding.scoreText.text=newScore.toString()
+        })
 
+        //When play again button clicked, will trigger onPlayAgain() and also triggered the eventPlayAgain
+        //The following code call the eventPlayAgain that called by the onPlayAgain() in ScoreViewModel file.
+        //After this event has been called, onPlayAgainComplete() in ScoreViewModel file will be called
+        viewModel.eventPlayAgain.observe(viewLifecycleOwner,Observer{playAgain->
+            if(playAgain){
+                findNavController().navigate(ScoreFragmentDirections.actionRestart())
+                viewModel.onPlayAgainComplete()
+            }
+        })
+        binding.playAgainButton.setOnClickListener {viewModel.onPlayAgain() }
         return binding.root
     }
 }
