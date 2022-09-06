@@ -100,7 +100,12 @@ class GameFragment : Fragment() {
         Toast.makeText(activity,"Game has just finished",Toast.LENGTH_SHORT).show()
         viewModel.onGameFinishComplete()
         val action =GameFragmentDirections.actionGameToScore()
+
+        //score is argument from GameFragment
         action.score=viewModel.score.value?:0
+
+        //pass argument to next Fragment
+        //cannot reference action of fragment
         NavHostFragment.findNavController(this).navigate(action)
     }
 
@@ -112,5 +117,11 @@ class GameFragment : Fragment() {
 
     /** Methods for updating the UI **/
 
-
+//    private fun updateWordText() {
+//        binding.wordText.text = viewModel.word
+//    }
+//
+//    private fun updateScoreText() {
+//        binding.scoreText.text = viewModel.score.toString()
+//    }
 }

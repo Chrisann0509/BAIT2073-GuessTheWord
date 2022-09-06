@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 // Step 3
 class ScoreViewModel(finalScore:Int): ViewModel() {
     //The final score
+//    val score=finalScore
     //Declare score as LiveData
     private val _score=MutableLiveData<Int>()
     val score:LiveData<Int>
